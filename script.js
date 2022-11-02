@@ -61,6 +61,29 @@ const inputLoanAmount = document.querySelector('.form__input--loan-amount');
 const inputCloseUsername = document.querySelector('.form__input--user');
 const inputClosePin = document.querySelector('.form__input--pin');
 
+// Creating a function to display the movements
+const displayMovements = function (movements) {
+  // Removing old Movements
+  containerMovements.innerHTML = '';
+  // .textContent = 0
+
+  movements.forEach(function (mov, i) {
+    // Positive - deposit / Negative - withdrawal
+    const type = mov > 0 ? 'deposit' : 'withdrawal';
+    // Creating HTML string with dynamic data (Template literal)
+    const html = `
+    <div class="movements__row">
+      <div class="movements__type movements__type--${type}">${
+      i + 1
+    } ${type}</div>
+      <div class="movements__value">${mov}</div>
+    </div>`;
+    // Adding HTML to the DOM element(containerMovements)
+    containerMovements.insertAdjacentHTML('afterbegin', html);
+  });
+};
+// Displaying the Movements of account1
+displayMovements(account1.movements);
 /////////////////////////////////////////////////
 /////////////////////////////////////////////////
 // LECTURES
@@ -166,7 +189,7 @@ movements.forEach(function (mov, i, arr) {
     console.log(`Movement ${i + 1}: You withdrew ${Math.abs(mov)}`);
   }
 });
-*/
+
 
 // LEC: forEach With Maps and Sets
 
@@ -187,3 +210,4 @@ console.log(currenciesUnique);
 currenciesUnique.forEach(function (value, _, map) {
   console.log(`${value}: ${value}`);
 });
+*/
