@@ -84,6 +84,23 @@ const displayMovements = function (movements) {
 };
 // Displaying the Movements of account1
 displayMovements(account1.movements);
+
+// Creating the username
+const createUsernames = function (accs) {
+  accs.forEach(function (acc) {
+    acc.username = acc.owner
+      .toLowerCase()
+      .split(' ')
+      .map(word => word[0])
+      .join('');
+  });
+};
+
+// const user = 'Steven Thomas Williams'; // stw
+
+createUsernames(accounts);
+console.log(accounts);
+
 /////////////////////////////////////////////////
 /////////////////////////////////////////////////
 // LECTURES
@@ -210,4 +227,98 @@ console.log(currenciesUnique);
 currenciesUnique.forEach(function (value, _, map) {
   console.log(`${value}: ${value}`);
 });
+
+Coding Challenge #1
+Julia and Kate are doing a study on dogs. So each of them asked 5 dog owners 
+about their dog's age, and stored the data into an array (one array for each). For 
+now, they are just interested in knowing whether a dog is an adult or a puppy.
+A dog is an adult if it is at least 3 years old, and it's a puppy if it's less than 3 years 
+old.
+Your tasks:
+Create a function 'checkDogs', which accepts 2 arrays of dog's ages 
+('dogsJulia' and 'dogsKate'), and does the following things:
+1. Julia found out that the owners of the first and the last two dogs actually have 
+cats, not dogs! So create a shallow copy of Julia's array, and remove the cat 
+ages from that copied array (because it's a bad practice to mutate function 
+parameters)
+2. Create an array with both Julia's (corrected) and Kate's data
+3. For each remaining dog, log to the console whether it's an adult ("Dog number 1 
+is an adult, and is 5 years old") or a puppy ("Dog number 2 is still a puppy 
+�
+")
+4. Run the function for both test datasets
+Test data:
+§ Data 1: Julia's data [3, 5, 2, 12, 7], Kate's data [4, 1, 15, 8, 3]
+§ Data 2: Julia's data [9, 16, 6, 8, 3], Kate's data [10, 5, 6, 1, 4]
+Hints: Use tools from all lectures in this section so far �
+GOOD LUCK �
+
+
+const juliaData1 = [3, 5, 2, 12, 7];
+const kateData1 = [4, 1, 15, 8, 3];
+const juliaData2 = [9, 16, 6, 8, 3];
+const kateData2 = [10, 5, 6, 1, 4];
+
+const checkDogs = function (dogsJulia, dogsKate) {
+  // 1
+  const dogsJuliaFixed = [...dogsJulia];
+  dogsJuliaFixed.splice(0, 1);
+  dogsJuliaFixed.splice(-2);
+  // dogsJulia.slice(1, 3)
+
+  // 2
+  const dogs = dogsJuliaFixed.concat(dogsKate);
+  console.log(dogs);
+
+  // 3
+  dogs.forEach(function (dogAge, i) {
+    if (dogAge >= 3) {
+      console.log(
+        `Dog number ${i + 1} is an adult, and is ${dogAge} years old`
+      );
+    } else {
+      console.log(`Dog number ${i + 1} is still a puppy 🐶`);
+    }
+  });
+};
+
+checkDogs(juliaData1, kateData1);
+checkDogs(juliaData2, kateData2);
+
+
+// LEC: Data Transformations: map, filter, reduce
+
+// Theory concepts
+
+// LEC: The map Method
+
+const movements = [200, 450, -400, 3000, -650, -130, 70, 1300];
+
+const eurToUsd = 1.1;
+
+const movementsUsd = movements.map(function (mov) {
+  return mov * eurToUsd;
+});
+console.log(movements);
+console.log(movementsUsd);
+
+const movementsUsdFor = [];
+for (const mov of movements) movementsUsdFor.push(mov * eurToUsd);
+console.log(movementsUsdFor);
+
+// Map with arrow function callback
+const movementsUsdArrow = movements.map(mov => mov * eurToUsd);
+console.log(movementsUsdArrow);
+
+// We can access to the same parameters like we do in the forEach
+const movementsDescriptions = movements.map(
+  (mov, i) =>
+    `Movement ${i + 1}: You ${mov > 0 ? 'deposited' : 'withdrew'} ${Math.abs(
+      mov
+    )}`
+);
+
+console.log(movementsDescriptions);
 */
+
+// LEC: Computing Usernames
