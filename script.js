@@ -85,6 +85,13 @@ const displayMovements = function (movements) {
 // Displaying the Movements of account1
 displayMovements(account1.movements);
 
+// Displaying Balance in the UI
+const calcDisplayBalance = function (movements) {
+  const balance = movements.reduce((acc, mov) => acc + mov, 0);
+  labelBalance.textContent = `${balance}€`;
+};
+calcDisplayBalance(account1.movements);
+
 // Creating the username
 const createUsernames = function (accs) {
   accs.forEach(function (acc) {
@@ -99,6 +106,7 @@ const createUsernames = function (accs) {
 // const user = 'Steven Thomas Williams'; // stw
 
 createUsernames(accounts);
+
 console.log(accounts);
 
 /////////////////////////////////////////////////
@@ -322,3 +330,66 @@ console.log(movementsDescriptions);
 */
 
 // LEC: Computing Usernames
+
+// const accounts = [account1, account2, account3, account4];
+
+// // Creating the username
+// const createUsernames = function (accs) {
+//   accs.forEach(function (acc) {
+//     acc.username = acc.owner
+//       .toLowerCase()
+//       .split(' ')
+//       .map(word => word[0])
+//       .join('');
+//   });
+// };
+
+// // const user = 'Steven Thomas Williams'; // stw
+
+// createUsernames(accounts);
+// // console.log(accounts);
+
+// LEC: The filter Method
+/*
+const movements = [200, 450, -400, 3000, -650, -130, 70, 1300];
+
+const deposites = movements.filter(function (mov) {
+  return mov > 0;
+});
+
+console.log(deposites);
+
+const depositFor = [];
+for (const mov of movements) {
+  if (mov > 0) depositFor.push(mov);
+}
+console.log(depositFor);
+
+const withdrawals = movements.filter(mov => mov < 0);
+console.log(withdrawals);
+*/
+
+// LEC: The reduce Method
+
+const movements = [200, 450, -400, 3000, -650, -130, 70, 1300];
+
+// accumulator -> SNOWBALL
+// const balance = movements.reduce(function (acc, cur, i, arr) {
+//   console.log(`Iteration ${i}: ${acc}`);
+//   return acc + cur;
+// }, 0);
+const balance = movements.reduce((acc, cur) => acc + cur, 0);
+console.log(balance);
+
+// The same with for of
+let balance2 = 0;
+for (const mov of movements) balance2 += mov;
+console.log(balance2);
+
+// Maximum value
+
+const max = movements.reduce(
+  (acc, cur) => (cur >= acc ? cur : acc),
+  movements[0]
+);
+console.log(max);
