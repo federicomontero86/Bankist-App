@@ -4,6 +4,7 @@
 /////////////////////////////////////////////////
 // BANKIST APP
 
+/////////////////////////////////////////////////
 // Data
 const account1 = {
   owner: 'Jonas Schmedtmann',
@@ -35,6 +36,7 @@ const account4 = {
 
 const accounts = [account1, account2, account3, account4];
 
+/////////////////////////////////////////////////
 // Elements
 const labelWelcome = document.querySelector('.welcome');
 const labelDate = document.querySelector('.date');
@@ -82,40 +84,36 @@ const displayMovements = function (movements) {
     containerMovements.insertAdjacentHTML('afterbegin', html);
   });
 };
-// Displaying the Movements of account1
-displayMovements(account1.movements);
 
 // Displaying Balance in the UI
 const calcDisplayBalance = function (movements) {
   const balance = movements.reduce((acc, mov) => acc + mov, 0);
   labelBalance.textContent = `${balance}€`;
 };
-calcDisplayBalance(account1.movements);
 
 // Displaying the Summary (IN, OUT, INTEREST)
 
-const calcDisplaySummary = function (movements) {
-  const incomes = movements
+const calcDisplaySummary = function (acc) {
+  const incomes = acc.movements
     .filter(mov => mov > 0)
     .reduce((acc, mov) => acc + mov, 0);
   labelSumIn.textContent = `${incomes}€`;
 
-  const out = movements
+  const out = acc.movements
     .filter(mov => mov < 0)
     .reduce((acc, mov) => acc + mov, 0);
   labelSumOut.textContent = `${Math.abs(out)}€`;
 
-  const interest = movements
+  const interest = acc.movements
     .filter(mov => mov > 0)
-    .map(deposit => (deposit * 1.2) / 100)
+    .map(deposit => (deposit * acc.interestRate) / 100)
     .filter((int, i, arr) => {
-      console.log(arr);
+      // console.log(arr);
       return int >= 1;
     })
     .reduce((acc, int) => acc + int, 0);
   labelSumInterest.textContent = `${interest}€`;
 };
-calcDisplaySummary(account1.movements);
 
 // Creating the username
 const createUsernames = function (accs) {
@@ -123,16 +121,46 @@ const createUsernames = function (accs) {
     acc.username = acc.owner
       .toLowerCase()
       .split(' ')
-      .map(word => word[0])
+      .map(name => name[0])
       .join('');
   });
 };
 
 // const user = 'Steven Thomas Williams'; // stw
-
 createUsernames(accounts);
 
 // console.log(accounts);
+
+// Event handler
+let currentAccount;
+
+btnLogin.addEventListener('click', function (e) {
+  // Because btnLogin button is in a form, it is type submit by default. That will make that whenever we click the button the page will relaod. We have to prevent that using preventDefault function on e parameter. All inputs in the form will trigger the click event after hitting enter on them.
+  e.preventDefault();
+
+  currentAccount = accounts.find(
+    acc => acc.username === inputLoginUsername.value
+  );
+  console.log(currentAccount);
+
+  if (currentAccount?.pin === Number(inputLoginPin.value)) {
+    // Display UI and welcome message
+    labelWelcome.textContent = `Welcome back, ${
+      currentAccount.owner.split(' ')[0]
+    }`;
+    containerApp.style.opacity = 100;
+
+    // Clear input fields
+    inputLoginUsername.value = inputLoginPin.value = '';
+    inputLoginPin.blur();
+    // Display movements
+    displayMovements(currentAccount.movements);
+    // Display balance
+    calcDisplayBalance(currentAccount.movements);
+    // Display summary
+    calcDisplaySummary(currentAccount);
+  }
+});
 
 /////////////////////////////////////////////////
 /////////////////////////////////////////////////
@@ -369,10 +397,10 @@ console.log(movementsDescriptions);
 //   });
 // };
 
-// // const user = 'Steven Thomas Williams'; // stw
+// const user = 'Steven Thomas Williams'; // stw
 
 // createUsernames(accounts);
-// // console.log(accounts);
+// console.log(accounts);
 
 // LEC: The filter Method
 /*
@@ -456,7 +484,7 @@ const calcAverageHumanAge = function (ages) {
 // 4
 calcAverageHumanAge([5, 2, 4, 1, 15, 8, 3]);
 calcAverageHumanAge([16, 6, 10, 5, 6, 1, 4]);
-*/
+
 
 // LEC: The Magic of Chaining Methods
 
@@ -470,7 +498,7 @@ const totalDepositsUSD = movements
   .reduce((acc, mov) => acc + mov, 0);
 console.log(totalDepositsUSD);
 
-// FINDING THE BUG WITH METHOD CHAINING
+// FINDING THE BUG WHILE USING METHOD CHAINING
 // const totalDepositsUSD = movements
 //   .filter(mov => mov < 0) // Error
 //   .map((mov, i, arr) => {
@@ -479,3 +507,81 @@ console.log(totalDepositsUSD);
 //   }) // With the arr parameter we can debug the previous error (accessing to the array post filter method in this case)
 //   .reduce((acc, mov) => acc + mov, 0);
 // console.log(totalDepositsUSD);
+
+
+Coding Challenge #3
+Rewrite the 'calcAverageHumanAge' function from Challenge #2, but this time 
+as an arrow function, and using chaining!
+Test data:
+§ Data 1: [5, 2, 4, 1, 15, 8, 3]
+§ Data 2: [16, 6, 10, 5, 6, 1, 4]
+GOOD LUCK �
+
+
+const calcAverageHumanAge = ages =>
+  ages
+    .map(age => (age <= 2 ? 2 * age : 16 + age * 4))
+    .filter(age => age >= 18)
+    .reduce((acc, age, i, arr) => acc + age / arr.length, 0);
+
+const avg1 = calcAverageHumanAge([5, 2, 4, 1, 15, 8, 3]);
+const avg2 = calcAverageHumanAge([16, 6, 10, 5, 6, 1, 4]);
+console.log(avg1, avg2);
+
+
+// The find Method
+
+const movements = [200, 450, -400, 3000, -650, -130, 70, 1300];
+
+const firstWithdrawal = movements.find(mov => mov < 0); // Returns the first element in the array that satisfy the condition
+console.log(firstWithdrawal);
+
+console.log(accounts);
+const account = accounts.find(acc => acc.owner === 'Jessica Davis');
+console.log(account);
+
+// Challenge - The same with for of
+const accountFunction = function (accs) {
+  for (const acc of accs) {
+    if (acc.owner === 'Jessica Davis') {
+      return acc;
+    }
+  }
+};
+
+console.log(accountFunction(accounts));
+
+
+// Implementing Login
+
+// Event handler
+let currentAccount;
+
+btnLogin.addEventListener('click', function (e) {
+  // Because btnLogin button is in a form, it is type submit by default. That will make that whenever we click the button the page will relaod. We have to prevent that using preventDefault function on e parameter. All inputs in the form will trigger the click event after hitting enter on them.
+  e.preventDefault();
+
+  currentAccount = accounts.find(
+    acc => acc.username === inputLoginUsername.value
+  );
+  console.log(currentAccount);
+
+  if (currentAccount?.pin === Number(inputLoginPin.value)) {
+    // Display UI and welcome message
+    labelWelcome.textContent = `Welcome back, ${
+      currentAccount.owner.split(' ')[0]
+    }`;
+    containerApp.style.opacity = 100;
+
+    // Clear input fields
+    inputLoginUsername.value = inputLoginPin.value = '';
+    inputLoginPin.blur();
+    // Display movements
+    displayMovements(currentAccount.movements);
+    // Display balance
+    calcDisplayBalance(currentAccount.movements);
+    // Display summary
+    calcDisplaySummary(currentAccount);
+  }
+});
+*/
