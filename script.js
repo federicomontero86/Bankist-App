@@ -193,6 +193,27 @@ btnTransfer.addEventListener('click', function (e) {
   }
 });
 
+btnClose.addEventListener('click', function (e) {
+  e.preventDefault();
+
+  if (
+    inputCloseUsername.value === currentAccount.username &&
+    Number(inputClosePin.value) === currentAccount.pin
+  ) {
+    const index = accounts.findIndex(
+      acc => acc.username === currentAccount.username
+    );
+    console.log(index);
+
+    // Delete account
+    accounts.splice(index, 1);
+
+    // Hide UI
+    containerApp.style.opacity = 0;
+  }
+  inputCloseUsername.value = inputClosePin.value = '';
+});
+
 /////////////////////////////////////////////////
 /////////////////////////////////////////////////
 // LECTURES
@@ -560,7 +581,7 @@ const avg2 = calcAverageHumanAge([16, 6, 10, 5, 6, 1, 4]);
 console.log(avg1, avg2);
 
 
-// The find Method
+// LEC: The find Method
 
 const movements = [200, 450, -400, 3000, -650, -130, 70, 1300];
 
@@ -583,7 +604,7 @@ const accountFunction = function (accs) {
 console.log(accountFunction(accounts));
 
 
-// Implementing Login
+// LEC: Implementing Login
 
 // Event handler
 let currentAccount;
@@ -617,7 +638,7 @@ btnLogin.addEventListener('click', function (e) {
 });
 
 
-// Implementing Transfers
+// LEC: Implementing Transfers
 
 btnTransfer.addEventListener('click', function (e) {
   e.preventDefault();
@@ -640,5 +661,29 @@ btnTransfer.addEventListener('click', function (e) {
     // Update UI
     updateUI(currentAccount);
   }
+});
+
+
+// LEC: The findIndex Method
+
+btnClose.addEventListener('click', function (e) {
+  e.preventDefault();
+
+  if (
+    inputCloseUsername.value === currentAccount.username &&
+    Number(inputClosePin.value) === currentAccount.pin
+  ) {
+    const index = accounts.findIndex(
+      acc => acc.username === currentAccount.username
+    );
+    console.log(index);
+
+    // Delete account
+    accounts.splice(index, 1);
+
+    // Hide UI
+    containerApp.style.opacity = 0;
+  }
+  inputCloseUsername.value = inputClosePin.value = '';
 });
 */
