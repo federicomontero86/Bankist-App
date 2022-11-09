@@ -64,12 +64,15 @@ const inputCloseUsername = document.querySelector('.form__input--user');
 const inputClosePin = document.querySelector('.form__input--pin');
 
 // Creating a function to display the movements
-const displayMovements = function (movements) {
+const displayMovements = function (movements, sort = false) {
   // Removing old Movements
   containerMovements.innerHTML = '';
   // .textContent = 0
 
-  movements.forEach(function (mov, i) {
+  // Implementing the Sorting Functionality
+  const movs = sort ? movements.slice().sort((a, b) => a - b) : movements;
+
+  movs.forEach(function (mov, i) {
     // Positive - deposit / Negative - withdrawal
     const type = mov > 0 ? 'deposit' : 'withdrawal';
     // Creating HTML string with dynamic data (Template literal)
@@ -227,6 +230,14 @@ btnClose.addEventListener('click', function (e) {
     containerApp.style.opacity = 0;
   }
   inputCloseUsername.value = inputClosePin.value = '';
+});
+
+// Event Handler for Sorting Implementation
+let sorted = false; // State variable
+btnSort.addEventListener('click', function (e) {
+  e.preventDefault();
+  displayMovements(currentAccount.movements, !sorted);
+  sorted = !sorted;
 });
 
 /////////////////////////////////////////////////
@@ -742,4 +753,69 @@ btnLoan.addEventListener('click', function (e) {
   }
   inputLoanAmount.value = '';
 });
+
+
+// LEC: flat and flatMap (ES2019)
+
+// flat
+const arr = [[1, 2, 3], [4, 5, 6], 7, 8];
+console.log(arr.flat()); // Return a flat array with all the numbers. Only goes one level deep in this case
+
+const arrDeep = [[[1, 2], 3], [4, [5, 6]], 7, 8];
+console.log(arrDeep.flat(2)); // Depth parameter (Level of nesting)
+
+// Adding all movements of all accounts (overalBalance)
+// const accountMovements = accounts.map(acc => acc.movements);
+// console.log(accountMovements);
+// const allMovements = accountMovements.flat();
+// console.log(allMovements);
+// const overalBalance = allMovements.reduce((acc, mov) => acc + mov, 0);
+// console.log(overalBalance);
+
+// The same with chaining
+const overalBalance = accounts
+  .map(acc => acc.movements)
+  .flat()
+  .reduce((acc, mov) => acc + mov, 0);
+console.log(overalBalance);
+
+// flatMap
+const overalBalance2 = accounts
+  .flatMap(acc => acc.movements) // Only goes one level deep
+  .reduce((acc, mov) => acc + mov, 0);
+console.log(overalBalance);
 */
+
+// LEC: Sorting Arrays
+
+// Strings
+const owners = ['Jonas', 'Zach', 'Adam', 'Martha'];
+console.log(owners.sort()); // Mutates the original array
+console.log(owners);
+
+// Numbers
+console.log(movements);
+// console.log(movements.sort()); // The sort Method does the sorting based on strings (first convert everything to strings)
+
+// return < 0, A, B (keep order)
+// return > 0, B, A (switch order)
+
+// Ascending
+// movements.sort((a, b) => {
+//   if (a > b) return 1;
+//   if (a < b) return -1;
+// });
+
+//Simplifying
+movements.sort((a, b) => a - b);
+console.log(movements);
+
+// Descending
+// movements.sort((a, b) => {
+//   if (a > b) return -1;
+//   if (a < b) return 1;
+// });
+
+//Simplifying
+movements.sort((a, b) => b - a);
+console.log(movements);
